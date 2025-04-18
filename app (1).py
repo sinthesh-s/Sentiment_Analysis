@@ -12,7 +12,7 @@ st.markdown('<p class="title">Movie Review Sentiment Analysis</p>', unsafe_allow
 st.subheader('Predict sentiment from user reviews!')
 
 # Add an image for visual appeal (ensure you have an image file)
-st.image('your_image.png', caption='Sentiment Analysis', use_column_width=True)
+st.image('image.png', caption='Sentiment Analysis', use_column_width=True)
 
 # Add custom CSS for layout and styling
 st.markdown("""
