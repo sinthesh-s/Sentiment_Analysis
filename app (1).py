@@ -6,27 +6,23 @@ def set_background(image_file):
         .stApp {{
             background: url("data:image/png;base64,{encoded}") no-repeat center center fixed;
             background-size: cover;
-            position: relative;
         }}
 
         .stApp::before {{
             content: "";
-            position: fixed;
+            position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            backdrop-filter: blur(6px);
+            right: 0;
+            bottom: 0;
             background-color: rgba(0, 0, 0, 0.35);
-            z-index: -1;
-        }}
-
-        @keyframes fadeSlide {{
-            0% {{ opacity: 0; transform: translateY(-20px); }}
-            100% {{ opacity: 1; transform: translateY(0); }}
+            backdrop-filter: blur(6px);
+            z-index: 0;
         }}
 
         .main-container {{
+            position: relative;
+            z-index: 1;
             background: rgba(255, 255, 255, 0.15);
             border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 20px;
@@ -36,6 +32,11 @@ def set_background(image_file):
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(10px);
             animation: fadeSlide 0.8s ease-out;
+        }}
+
+        @keyframes fadeSlide {{
+            0% {{ opacity: 0; transform: translateY(-20px); }}
+            100% {{ opacity: 1; transform: translateY(0); }}
         }}
 
         .stTextArea textarea {{
