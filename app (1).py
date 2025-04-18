@@ -1,3 +1,6 @@
+import streamlit as st
+import base64
+
 def set_background(image_file):
     with open(image_file, "rb") as img:
         encoded = base64.b64encode(img.read()).decode()
@@ -8,39 +11,13 @@ def set_background(image_file):
             background-size: cover;
         }}
 
-        .stApp::before {{
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.35);
-            backdrop-filter: blur(6px);
-            z-index: 0;
-        }}
-
-        .main-container {{
-            position: relative;
-            z-index: 1;
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 700px;
-            margin: 80px auto;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
-            animation: fadeSlide 0.8s ease-out;
-        }}
-
         @keyframes fadeSlide {{
             0% {{ opacity: 0; transform: translateY(-20px); }}
             100% {{ opacity: 1; transform: translateY(0); }}
         }}
 
         .stTextArea textarea {{
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.85);
             color: #333;
             border: none;
             border-radius: 12px;
@@ -88,4 +65,4 @@ def set_background(image_file):
         }}
         </style>
         """
-        st.markdown(background_style, unsafe_allow_html=True)
+    st.markdown(background_style, unsafe_allow_html=True)
