@@ -5,7 +5,7 @@ import base64
 # Set page configuration
 st.set_page_config(page_title="Sentiment Analysis", layout="centered")
 
-# Function to set background with fixed layout
+# Function to set the background
 def set_background(image_file):
     with open(image_file, "rb") as img:
         encoded = base64.b64encode(img.read()).decode()
@@ -31,7 +31,7 @@ def set_background(image_file):
         .main-container {{
             background: rgba(255, 255, 255, 0.12);
             border-radius: 20px;
-            padding: 35px;
+            padding: 35px 30px 30px 30px;
             width: 100%;
             max-width: 600px;
             backdrop-filter: blur(15px);
@@ -75,6 +75,7 @@ def set_background(image_file):
             font-size: 16px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             transition: all 0.3s ease;
+            margin-top: 15px;
         }}
 
         .stButton>button:hover {{
@@ -92,13 +93,13 @@ def set_background(image_file):
     st.markdown(background_style, unsafe_allow_html=True)
 
 # Apply background
-set_background("background_image.jpg")  # Ensure correct image name!
+set_background("background_image.jpg")  # Make sure your file name matches!
 
 # Load model and vectorizer
 model = joblib.load('logistic_regression_modelF.pkl')
 vectorizer = joblib.load('tfidf_vectorizer.pkl')
 
-# Glass container for content
+# Start of the glassmorphism container
 st.markdown('<div class="main-container">', unsafe_allow_html=True)
 
 st.title('🎬 Sentiment Analysis App')
@@ -114,4 +115,4 @@ if st.button('Predict'):
     else:
         st.warning('⚠️ Please enter a valid review.')
 
-st.markdown('</div>', unsafe_allow_html=True)
+st.markdown('</div>', unsafe_allow_html=True)  # Close glass container
