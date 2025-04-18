@@ -2,117 +2,120 @@ import streamlit as st
 import joblib
 import base64
 
-# Set page configuration
 st.set_page_config(page_title="Sentiment Analysis", layout="centered")
 
-# Function to set the background
 def set_background(image_file):
     with open(image_file, "rb") as img:
         encoded = base64.b64encode(img.read()).decode()
-        background_style = f"""
+        st.markdown(f"""
         <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
         .stApp {{
             background: url("data:image/png;base64,{encoded}") no-repeat center center fixed;
             background-size: cover;
             font-family: 'Poppins', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
         }}
 
-        @keyframes fadeSlide {{
-            0% {{ opacity: 0; transform: translateY(-20px); }}
-            100% {{ opacity: 1; transform: translateY(0); }}
-        }}
-
-        .main-container {{
-            background: rgba(255, 255, 255, 0.12);
+        .glass-card {{
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 20px;
-            padding: 35px 30px 30px 30px;
-            width: 100%;
+            padding: 40px 30px;
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
             max-width: 600px;
-            backdrop-filter: blur(15px);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-            animation: fadeSlide 1s ease-out;
-            color: #ffffff;
+            margin: 100px auto;
             text-align: center;
+            animation: fadeIn 1s ease forwards;
+            border: 1px solid rgba(255,255,255,0.2);
         }}
 
         h1 {{
+            font-size: 2.5rem;
             color: #ffffff;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
-            font-size: 2.3rem;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.6);
+        }}
+
+        label {{
+            font-size: 1rem;
+            color: #dddddd;
+            margin-bottom: 0.5rem;
+            display: block;
+            text-align: left;
         }}
 
         .stTextArea textarea {{
-            background: rgba(0,0,0,0.3);
-            color: #f0f0f0;
-            border: none;
-            border-radius: 10px;
-            padding: 12px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 12px;
+            color: #fff;
             font-size: 15px;
-            transition: all 0.3s ease;
-        }}
-
-        .stTextArea textarea:focus {{
-            border: 2px solid #ff4b4b;
-            outline: none;
-            background: rgba(255, 255, 255, 0.15);
-            color: white;
+            padding: 14px;
         }}
 
         .stButton>button {{
-            background: linear-gradient(135deg, #ff4b4b, #ff7777);
+            background: linear-gradient(90deg, #ff4b4b, #ff7777);
             color: white;
             border: none;
-            border-radius: 12px;
-            padding: 0.6em 1.5em;
-            font-weight: 600;
+            border-radius: 14px;
+            padding: 0.7em 2em;
             font-size: 16px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-            margin-top: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s ease;
+            margin-top: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         }}
 
         .stButton>button:hover {{
             background: white;
             color: #ff4b4b;
+            transform: translateY(-2px) scale(1.03);
             border: 2px solid #ff4b4b;
-            transform: translateY(-2px) scale(1.05);
         }}
 
-        .stMarkdown p, .stAlert {{
-            color: #f0f0f0;
+        .stMarkdown p {{
+            color: #eeeeee;
+            font-size: 16px;
+        }}
+
+        .stAlert {{
+            border-radius: 12px;
+        }}
+
+        @keyframes fadeIn {{
+            0% {{ opacity: 0; transform: translateY(-20px); }}
+            100% {{ opacity: 1; transform: translateY(0); }}
         }}
         </style>
-        """
-    st.markdown(background_style, unsafe_allow_html=True)
+        """, unsafe_allow_html=True)
 
-# Apply background
-set_background("background_image.jpg")  # Make sure your file name matches!
+set_background("background_image.jpg")
 
 # Load model and vectorizer
 model = joblib.load('logistic_regression_modelF.pkl')
 vectorizer = joblib.load('tfidf_vectorizer.pkl')
 
-# Start of the glassmorphism container
-st.markdown('<div class="main-container">', unsafe_allow_html=True)
+st.markdown('<div class="glass-card">', unsafe_allow_html=True)
 
-st.title('🎬 Sentiment Analysis App')
+st.title('🎬 Sentiment Analysis')
+
 review = st.text_area('📝 Enter a movie review:')
 
 if st.button('Predict'):
     if review.strip():
         transformed_review = vectorizer.transform([review])
         prediction = model.predict(transformed_review)[0]
-
         sentiment = ['Negative', 'Neutral', 'Positive']
-        st.success(f"✅ Sentiment: **{sentiment[prediction]}**")
+        color = ['#FF4B4B', '#FFC107', '#00C851']
+
+        st.markdown(
+            f"<h3 style='color:{color[prediction]}; font-weight:700;'>Sentiment: {sentiment[prediction]}</h3>",
+            unsafe_allow_html=True
+        )
     else:
         st.warning('⚠️ Please enter a valid review.')
 
-st.markdown('</div>', unsafe_allow_html=True)  # Close glass container
+st.markdown('</div>', unsafe_allow_html=True)
