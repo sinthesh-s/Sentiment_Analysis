@@ -1,6 +1,11 @@
 import streamlit as st
+import joblib
 import base64
 
+# Set page configuration
+st.set_page_config(page_title="Sentiment Analysis", layout="centered")
+
+# Function to set stylish background with overlay
 def set_background(image_file):
     with open(image_file, "rb") as img:
         encoded = base64.b64encode(img.read()).decode()
@@ -11,58 +16,78 @@ def set_background(image_file):
             background-size: cover;
         }}
 
-        @keyframes fadeSlide {{
-            0% {{ opacity: 0; transform: translateY(-20px); }}
-            100% {{ opacity: 1; transform: translateY(0); }}
+        /* Full screen dark overlay */
+        .stApp::before {{
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.65);
+            z-index: -1;
+        }}
+
+        /* Centered glassmorphism card */
+        .main-container {{
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 600px;
+            margin: 100px auto;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            color: white;
         }}
 
         .stTextArea textarea {{
-            background: rgba(255, 255, 255, 0.85);
-            color: #333;
-            border: none;
-            border-radius: 12px;
-            padding: 12px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }}
-
-        .stTextArea textarea:focus {{
-            border: 2px solid #ff4b4b;
-            outline: none;
-            background: rgba(255, 255, 255, 0.95);
+            background-color: rgba(0,0,0,0.6);
+            color: white;
+            border-radius: 8px;
         }}
 
         .stButton>button {{
-            background: linear-gradient(145deg, #ff4b4b, #ff6b6b);
+            background-color: #ff4b4b;
             color: white;
             border: none;
-            border-radius: 12px;
-            padding: 0.6em 1.4em;
-            font-weight: 600;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
+            border-radius: 8px;
+            padding: 0.5em 1em;
+            font-weight: bold;
+            transition: 0.3s ease;
         }}
 
         .stButton>button:hover {{
-            background: white;
+            background-color: white;
             color: #ff4b4b;
-            border: 2px solid #ff4b4b;
-            transform: translateY(-2px) scale(1.03);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid #ff4b4b;
         }}
 
-        h1, .stMarkdown h1 {{
-            color: #ffffff;
-            text-align: center;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.5);
-        }}
-
-        .stMarkdown p {{
-            color: #eee;
-            font-size: 16px;
-            line-height: 1.6;
+        h1, .stMarkdown, .stAlert {{
+            color: white;
         }}
         </style>
         """
-    st.markdown(background_style, unsafe_allow_html=True)
+        st.markdown(background_style, unsafe_allow_html=True)
+
+# Apply background and styling
+set_background("background_image.jpg")  # Make sure this is the correct filename
+
+# Load model and vectorizer
+model = joblib.load('logistic_regression_modelF.pkl')
+vectorizer = joblib.load('tfidf_vectorizer.pkl')
+
+# Layout inside a styled container
+st.markdown('<div class="main-container">', unsafe_allow_html=True)
+st.title('🎬 Sentiment Analysis App')
+review = st.text_area('📝 Enter a movie review:')
+
+if st.button('Predict'):
+    if review.strip():
+        transformed_review = vectorizer.transform([review])
+        prediction = model.predict(transformed_review)[0]
+
+        sentiment = ['Negative', 'Neutral', 'Positive']
+        st.success(f"✅ Sentiment: **{sentiment[prediction]}**")
+    else:
+        st.warning('⚠️ Please enter a valid review.')
+st.markdown('</div>', unsafe_allow_html=True)
