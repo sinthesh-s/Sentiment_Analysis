@@ -5,7 +5,7 @@ import base64
 # Set page configuration
 st.set_page_config(page_title="Sentiment Analysis", layout="centered")
 
-# Function to set stylish background
+# Function to set background with fixed layout
 def set_background(image_file):
     with open(image_file, "rb") as img:
         encoded = base64.b64encode(img.read()).decode()
@@ -17,27 +17,39 @@ def set_background(image_file):
             background: url("data:image/png;base64,{encoded}") no-repeat center center fixed;
             background-size: cover;
             font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }}
 
         @keyframes fadeSlide {{
-            0% {{ opacity: 0; transform: translateY(-30px); }}
+            0% {{ opacity: 0; transform: translateY(-20px); }}
             100% {{ opacity: 1; transform: translateY(0); }}
         }}
 
         .main-container {{
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.12);
             border-radius: 20px;
             padding: 35px;
-            max-width: 650px;
-            margin: 100px auto;
-            backdrop-filter: blur(12px);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+            width: 100%;
+            max-width: 600px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
             animation: fadeSlide 1s ease-out;
             color: #ffffff;
+            text-align: center;
+        }}
+
+        h1 {{
+            color: #ffffff;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+            font-size: 2.3rem;
+            margin-bottom: 20px;
         }}
 
         .stTextArea textarea {{
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0,0,0,0.3);
             color: #f0f0f0;
             border: none;
             border-radius: 10px;
@@ -49,7 +61,7 @@ def set_background(image_file):
         .stTextArea textarea:focus {{
             border: 2px solid #ff4b4b;
             outline: none;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.15);
             color: white;
         }}
 
@@ -61,7 +73,7 @@ def set_background(image_file):
             padding: 0.6em 1.5em;
             font-weight: 600;
             font-size: 16px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
             transition: all 0.3s ease;
         }}
 
@@ -69,37 +81,27 @@ def set_background(image_file):
             background: white;
             color: #ff4b4b;
             border: 2px solid #ff4b4b;
-            transform: translateY(-2px) scale(1.04);
-            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.35);
+            transform: translateY(-2px) scale(1.05);
         }}
 
-        h1 {{
-            color: #ffffff;
-            text-align: center;
-            text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
-            font-size: 2.5rem;
-            margin-bottom: 25px;
-        }}
-
-        .stMarkdown p {{
-            color: #eeeeee;
-            font-size: 16px;
+        .stMarkdown p, .stAlert {{
+            color: #f0f0f0;
         }}
         </style>
         """
     st.markdown(background_style, unsafe_allow_html=True)
 
 # Apply background
-set_background("background_image.jpg")  # Make sure the filename is correct
+set_background("background_image.jpg")  # Ensure correct image name!
 
 # Load model and vectorizer
 model = joblib.load('logistic_regression_modelF.pkl')
 vectorizer = joblib.load('tfidf_vectorizer.pkl')
 
-# Layout inside a styled container
+# Glass container for content
 st.markdown('<div class="main-container">', unsafe_allow_html=True)
-st.title('🎬 Sentiment Analysis App')
 
+st.title('🎬 Sentiment Analysis App')
 review = st.text_area('📝 Enter a movie review:')
 
 if st.button('Predict'):
