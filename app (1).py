@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Load the saved model and vectorizer
-model = joblib.load('logistic_regression_model.pkl')
+model = joblib.load('logistic_regression_modelF.pkl')
 vectorizer = joblib.load('tfidf_vectorizer.pkl')
 
 # Set the title and header with custom styling
