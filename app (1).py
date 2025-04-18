@@ -3,7 +3,6 @@ import streamlit as st
 import joblib
 import matplotlib.pyplot as plt
 import seaborn as sns
-df = pd.read_csv('cleaned_dataset_134.csv')
 # Load the saved model and vectorizer
 model = joblib.load('logistic_regression_modelF.pkl')
 vectorizer = joblib.load('tfidf_vectorizer.pkl')
