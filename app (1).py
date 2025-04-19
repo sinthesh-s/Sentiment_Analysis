@@ -1,6 +1,6 @@
 import streamlit as st
 import joblib
-import base64
+import base64 
 
 # Page setup
 st.set_page_config(page_title="🎬 Movie Sentiment Analyzer", page_icon="🎬", layout="centered")
@@ -17,21 +17,22 @@ def set_background(image_file):
             background: url("data:image/png;base64,{encoded}") no-repeat center center fixed;
             background-size: cover;
             font-family: 'Montserrat', sans-serif;
-            color: #FFFFFF;
+            color: #1E90FF;
             text-align: center;
         }}
 
         h1 {{
+            color: #1E90FF;
             font-weight: 700;
             margin-top: 5vh;
             margin-bottom: 2rem;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.6);
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
         }}
 
         .stTextArea textarea {{
-            border: 2px solid #00ffc6;
+            border: 2px solid #1E90FF;
             border-radius: 8px;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.7);
             color: #ffffff;
             padding: 1rem;
             font-size: 1rem;
@@ -58,18 +59,18 @@ def set_background(image_file):
         }}
 
         .result-box {{
-            background: rgba(0, 0, 0, 0.75);
+            background: rgba(0, 0, 0, 0.85);
             padding: 1rem 2rem;
             border-radius: 15px;
             margin-top: 1.5rem;
             display: inline-block;
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #00ffc6;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #1E90FF;
         }}
 
         .stMarkdown p, .stAlert {{
-            color: #ffffff;
+            color: #1E90FF;
         }}
         </style>
         """
