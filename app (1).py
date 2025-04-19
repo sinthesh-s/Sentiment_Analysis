@@ -1,8 +1,7 @@
 import streamlit as st
 import joblib
-import base64 
+import base64
 import numpy as np
-from keras.models import load_model
 
 # Page setup
 st.set_page_config(page_title="🎬 Movie Sentiment Analyzer", page_icon="🎬", layout="centered")
@@ -77,11 +76,11 @@ def set_background(image_file):
         """
     st.markdown(custom_css, unsafe_allow_html=True)
 
-# Set your new background image
+# Set your background image
 set_background("background_image.jpg")
 
 # Load model and vectorizer
-model = joblib.load('logistic_regression_modelF.keras')
+model = joblib.load('logistic_regression_modelF.keras')  # This is actually a sklearn model
 vectorizer = joblib.load('tfidf_vectorizer.pkl')
 
 # App content
@@ -92,14 +91,17 @@ review = st.text_area('📝 Enter your movie review:')
 if st.button('Predict Sentiment'):
     if review.strip():
         # Transform the review
-        transformed_review = vectorizer.transform([review]).toarray()
+        transformed_review = vectorizer.transform([review])
 
-        # Predict and decode the output
-        prediction = model.predict(transformed_review)
-        predicted_label = np.argmax(prediction, axis=1)[0]  # Get the index of highest probability
+        # Predict
+        prediction = model.predict(transformed_review)[0]  # single output label (0, 1, or 2)
+
+        # Optional: if you want probabilities, use:
+        # proba = model.predict_proba(transformed_review)
+        # st.write("Probabilities:", proba)
 
         sentiment = ['😡 Negative', '😐 Neutral', '😊 Positive']
-        result_html = f'<div class="result-box">Result: {sentiment[predicted_label]}</div>'
+        result_html = f'<div class="result-box">Result: {sentiment[prediction]}</div>'
         st.markdown(result_html, unsafe_allow_html=True)
     else:
         st.warning('⚠️ Please enter a valid review to analyze.')
