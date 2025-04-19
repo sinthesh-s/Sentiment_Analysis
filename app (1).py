@@ -1,6 +1,7 @@
 import streamlit as st
 import joblib
 import base64 
+import numpy as np
 from keras.models import load_model
 
 # Page setup
@@ -90,11 +91,15 @@ review = st.text_area('📝 Enter your movie review:')
 
 if st.button('Predict Sentiment'):
     if review.strip():
-        transformed_review = vectorizer.transform([review])
-        prediction = model.predict(transformed_review)[0]
+        # Transform the review
+        transformed_review = vectorizer.transform([review]).toarray()
+
+        # Predict and decode the output
+        prediction = model.predict(transformed_review)
+        predicted_label = np.argmax(prediction, axis=1)[0]  # Get the index of highest probability
 
         sentiment = ['😡 Negative', '😐 Neutral', '😊 Positive']
-        result_html = f'<div class="result-box">Result: {sentiment[prediction]}</div>'
+        result_html = f'<div class="result-box">Result: {sentiment[predicted_label]}</div>'
         st.markdown(result_html, unsafe_allow_html=True)
     else:
         st.warning('⚠️ Please enter a valid review to analyze.')
