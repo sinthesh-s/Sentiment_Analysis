@@ -1,6 +1,6 @@
 import streamlit as st
 import joblib
-import base64
+import base64 
 
 # Page setup
 st.set_page_config(page_title="🎬 Movie Sentiment Analyzer", page_icon="🎬", layout="centered")
@@ -17,7 +17,7 @@ def set_background(image_file):
             background: url("data:image/png;base64,{encoded}") no-repeat center center fixed;
             background-size: cover;
             font-family: 'Montserrat', sans-serif;
-            color: #1E90FF;
+            color: #FFFFFF;
             text-align: center;
         }}
 
@@ -26,7 +26,6 @@ def set_background(image_file):
             margin-top: 5vh;
             margin-bottom: 2rem;
             text-shadow: 2px 2px 10px rgba(0,0,0,0.6);
-            color: #1E90FF;  /* Ensures "Movie Sentiment Analyzer" stays the same color */
         }}
 
         .stTextArea textarea {{
@@ -59,29 +58,24 @@ def set_background(image_file):
         }}
 
         .result-box {{
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0, 0, 0, 0.75);
             padding: 1rem 2rem;
             border-radius: 15px;
             margin-top: 1.5rem;
             display: inline-block;
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #1E90FF;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #00ffc6;
         }}
 
         .stMarkdown p, .stAlert {{
-            color: #1E90FF;
-        }}
-
-        /* Hide Streamlit's 'Press Ctrl+Enter to apply' text */
-        .stMarkdown small {{
-            display: none;
+            color: #ffffff;
         }}
         </style>
         """
     st.markdown(custom_css, unsafe_allow_html=True)
 
-# Set your background image (JPEG)
+# Set your new background image
 set_background("background_image.jpg")
 
 # Load model and vectorizer
