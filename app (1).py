@@ -79,7 +79,7 @@ def set_background(image_file):
 set_background("background_image.jpg")
 
 # Load model and vectorizer
-model = joblib.load('logistic_regression_modelF.pkl')
+model = joblib.load('logistic_regression_modelF.keras')
 vectorizer = joblib.load('tfidf_vectorizer.pkl')
 
 # App content
