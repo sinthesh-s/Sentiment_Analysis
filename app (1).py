@@ -76,7 +76,7 @@ def set_background(image_file):
     st.markdown(custom_css, unsafe_allow_html=True)
 
 # Set your new background image
-set_background("background_image.png")  # Make sure your PNG filename matches!
+set_background("background_image.jpg")
 
 # Load model and vectorizer
 model = joblib.load('logistic_regression_modelF.pkl')
