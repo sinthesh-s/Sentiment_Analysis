@@ -17,7 +17,7 @@ def set_background(image_file):
             background: url("data:image/png;base64,{encoded}") no-repeat center center fixed;
             background-size: cover;
             font-family: 'Montserrat', sans-serif;
-            color: #FFFFFF;
+            color: #1E90FF;
             text-align: center;
         }}
 
@@ -58,25 +58,30 @@ def set_background(image_file):
         }}
 
         .result-box {{
-            background: rgba(0, 0, 0, 0.75);
+            background: rgba(0, 0, 0, 0.85);
             padding: 1rem 2rem;
             border-radius: 15px;
             margin-top: 1.5rem;
             display: inline-block;
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #00ffc6;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #1E90FF;
         }}
 
         .stMarkdown p, .stAlert {{
-            color: #ffffff;
+            color: #1E90FF;
+        }}
+
+        /* Hide Streamlit's 'Press Ctrl+Enter to apply' text */
+        .stMarkdown small {{
+            display: none;
         }}
         </style>
         """
     st.markdown(custom_css, unsafe_allow_html=True)
 
-# Set your new background image
-set_background("background_image.jpg") 
+# Set your background image (JPEG)
+set_background("background_image.jpg")
 
 # Load model and vectorizer
 model = joblib.load('logistic_regression_modelF.pkl')
