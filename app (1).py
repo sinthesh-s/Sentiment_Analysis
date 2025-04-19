@@ -1,6 +1,7 @@
 import streamlit as st
 import joblib
 import base64 
+from keras.models import load_model
 
 # Page setup
 st.set_page_config(page_title="🎬 Movie Sentiment Analyzer", page_icon="🎬", layout="centered")
@@ -79,7 +80,7 @@ def set_background(image_file):
 set_background("background_image.jpg")
 
 # Load model and vectorizer
-model = joblib.load('logistic_regression_modelF.keras')
+model = load_model('logistic_regression_modelF.keras')
 vectorizer = joblib.load('tfidf_vectorizer.pkl')
 
 # App content
