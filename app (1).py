@@ -1,6 +1,6 @@
 import streamlit as st
 import joblib
-import base64 
+import base64
 
 # Page setup
 st.set_page_config(page_title="🎬 Movie Sentiment Analyzer", page_icon="🎬", layout="centered")
@@ -17,22 +17,21 @@ def set_background(image_file):
             background: url("data:image/png;base64,{encoded}") no-repeat center center fixed;
             background-size: cover;
             font-family: 'Montserrat', sans-serif;
-            color: #1E90FF;
+            color: #FFFFFF;
             text-align: center;
         }}
 
         h1 {{
-            color: #1E90FF;
             font-weight: 700;
             margin-top: 5vh;
             margin-bottom: 2rem;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.6);
         }}
 
         .stTextArea textarea {{
-            border: 2px solid #1E90FF;
+            border: 2px solid #00ffc6;
             border-radius: 8px;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.6);
             color: #ffffff;
             padding: 1rem;
             font-size: 1rem;
@@ -59,25 +58,25 @@ def set_background(image_file):
         }}
 
         .result-box {{
-            background: rgba(0, 0, 0, 0.85);
+            background: rgba(0, 0, 0, 0.75);
             padding: 1rem 2rem;
             border-radius: 15px;
             margin-top: 1.5rem;
             display: inline-block;
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #1E90FF;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #00ffc6;
         }}
 
         .stMarkdown p, .stAlert {{
-            color: #1E90FF;
+            color: #ffffff;
         }}
         </style>
         """
     st.markdown(custom_css, unsafe_allow_html=True)
 
 # Set your new background image
-set_background("background_image.jpg")
+set_background("background_image.jpg") 
 
 # Load model and vectorizer
 model = joblib.load('logistic_regression_modelF.pkl')
