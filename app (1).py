@@ -26,6 +26,7 @@ def set_background(image_file):
             margin-top: 5vh;
             margin-bottom: 2rem;
             text-shadow: 2px 2px 10px rgba(0,0,0,0.6);
+            color: #1E90FF;  /* Ensures "Movie Sentiment Analyzer" stays the same color */
         }}
 
         .stTextArea textarea {{
