@@ -48,8 +48,8 @@ def deep_clean(text):
 set_background("background_image.jpg")
 
 # Load the trained model and vectorizer
-model = joblib.load('logistic_regression_modelK.pkl')
-vectorizer = joblib.load('tfidf_vectorizerK.pkl')
+model = joblib.load('logistic_regression_modelX.pkl')
+vectorizer = joblib.load('tfidf_vectorizerX.pkl')
 
 # Sentiment label mapping
 label_mapping = {0: 'Negative', 1: 'Neutral', 2: 'Positive'}
