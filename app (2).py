@@ -50,7 +50,7 @@ def deep_clean(text):
 set_background("background_image.jpg")
 
 # Load the trained model, vectorizer, and label encoder
-model = joblib.load('logistic_regression_modelX.pkl')
+model = joblib.load('logistic_regression_model.pkl')
 vectorizer = joblib.load('tfidf_vectorizerX.pkl')
 label_encoder = joblib.load('label_encoderX.pkl')
 
