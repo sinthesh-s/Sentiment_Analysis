@@ -47,12 +47,10 @@ def deep_clean(text):
 # Set background image
 set_background("background_image.jpg")
 
-# Load the trained model and vectorizer
+# Load the trained model, vectorizer, and label encoder
 model = joblib.load('logistic_regression_modelX.pkl')
 vectorizer = joblib.load('tfidf_vectorizerX.pkl')
-
-# Sentiment label mapping
-label_mapping = {0: 'Negative', 1: 'Neutral', 2: 'Positive'}
+label_encoder = joblib.load('label_encoderX.pkl')  # <-- New addition
 
 # Custom CSS
 st.markdown(
@@ -76,7 +74,7 @@ st.markdown(
 
 # App Header
 st.title("🎬 IMDB Movie Review Sentiment Analyzer")
-st.write("Welcome! Enter a movie review below and let the model predict if it's *Positive, **Neutral, or **Negative*! 💬")
+st.write("Welcome! Enter a movie review below and let the model predict if it's *Positive, Neutral, or Negative*! 💬")
 
 # Text input
 user_input = st.text_area("📝 Write your review here:")
@@ -87,7 +85,7 @@ if st.button("🔍 Analyze Sentiment"):
         cleaned_input = deep_clean(user_input)
         review_vector = vectorizer.transform([cleaned_input])
         prediction = model.predict(review_vector)[0]
-        predicted_sentiment = label_mapping.get(prediction, "Unknown")
+        predicted_sentiment = label_encoder.inverse_transform([prediction])[0]  # <-- Correct prediction decoding
 
         # Display result
         st.subheader("🎯 Prediction Result:")
