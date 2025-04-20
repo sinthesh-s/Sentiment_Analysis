@@ -1,8 +1,10 @@
 import streamlit as st
 import joblib
 import base64
+import re
+import string
 
-# Set page configuration as the first command
+# Set page configuration
 st.set_page_config(page_title="IMDB Sentiment Analyzer 🎬", layout="centered")
 
 # Function to set the background image from a local file (with base64 encoding)
@@ -26,6 +28,22 @@ def set_background(image_file):
     """
     st.markdown(css, unsafe_allow_html=True)
 
+# Preprocessing functions (same as used during training)
+def remove_html_tags(text):
+    clean = re.compile('<.*?>')
+    return re.sub(clean, '', text)
+
+def clean_text(text):
+    text = text.lower()
+    text = re.sub(f'[{re.escape(string.punctuation)}]', '', text)
+    text = re.sub(r'\s+', ' ', text).strip()
+    return text
+
+def deep_clean(text):
+    text = remove_html_tags(text)
+    text = clean_text(text)
+    return text
+
 # Set background image
 set_background("background_image.jpg")
 
@@ -33,10 +51,10 @@ set_background("background_image.jpg")
 model = joblib.load('logistic_regression_modelK.pkl')
 vectorizer = joblib.load('tfidf_vectorizerK.pkl')
 
-# Sentiment label mapping (adjust if necessary)
+# Sentiment label mapping
 label_mapping = {0: 'Negative', 1: 'Neutral', 2: 'Positive'}
 
-# Custom CSS for font styling
+# Custom CSS
 st.markdown(
     """
     <style>
@@ -58,7 +76,7 @@ st.markdown(
 
 # App Header
 st.title("🎬 IMDB Movie Review Sentiment Analyzer")
-st.write("Welcome! Enter a movie review below and let the model predict if it's **Positive**, **Neutral**, or **Negative**! 💬")
+st.write("Welcome! Enter a movie review below and let the model predict if it's *Positive, **Neutral, or **Negative*! 💬")
 
 # Text input
 user_input = st.text_area("📝 Write your review here:")
@@ -66,19 +84,17 @@ user_input = st.text_area("📝 Write your review here:")
 # Predict button
 if st.button("🔍 Analyze Sentiment"):
     if user_input.strip():
-        # Transform input using TF-IDF vectorizer
-        review_vector = vectorizer.transform([user_input])
-
-        # Predict sentiment
+        cleaned_input = deep_clean(user_input)
+        review_vector = vectorizer.transform([cleaned_input])
         prediction = model.predict(review_vector)[0]
         predicted_sentiment = label_mapping.get(prediction, "Unknown")
 
         # Display result
         st.subheader("🎯 Prediction Result:")
-        st.success(f"✅ The review is predicted to be: **{predicted_sentiment.upper()}**")
+        st.success(f"✅ The review is predicted to be: *{predicted_sentiment.upper()}*")
     else:
-        st.warning("⚠️ Please enter a valid review before clicking Analyze.")
+        st.warning("⚠ Please enter a valid review before clicking Analyze.")
 
 # Footer
 st.markdown("---")
-st.caption("Made with ❤️ using Streamlit and Logistic Regression.")
+st.caption("Made with ❤ using Streamlit and Logistic Regression.")
