@@ -1,45 +1,5 @@
 import streamlit as st
 import joblib
-import base64
-
-# Function to set background image from local file (and apply animation)
-def set_background(image_file):
-    with open(image_file, "rb") as image:
-        encoded = base64.b64encode(image.read()).decode()
-    css = f"""
-    <style>
-    .stApp {{
-        background-image: url("data:image/jpg;base64,{encoded}");
-        background-size: cover;
-        background-attachment: fixed;
-        animation: backgroundAnimation 15s infinite;
-    }}
-    @keyframes backgroundAnimation {{
-        0% {{
-            background-position: 0% 0%;
-        }}
-        50% {{
-            background-position: 100% 100%;
-        }}
-        100% {{
-            background-position: 0% 0%;
-        }}
-    }}
-    .stTextInput > div > div > input {{
-        font-size: 16px;
-    }}
-    .stTextArea > div > div > textarea {{
-        font-size: 16px;
-    }}
-    .stButton > button {{
-        font-size: 16px;
-    }}
-    </style>
-    """
-    st.markdown(css, unsafe_allow_html=True)
-
-# Set background image and animation
-set_background("background_image.jpg")
 
 # Load the trained model and vectorizer
 model = joblib.load('logistic_regression_modelF.pkl')
@@ -50,6 +10,31 @@ label_mapping = {0: 'Negative', 1: 'Neutral', 2: 'Positive'}
 
 # Streamlit page config
 st.set_page_config(page_title="IMDB Sentiment Analyzer 🎬", layout="centered")
+
+# Custom CSS for background and font styling
+st.markdown(
+    """
+    <style>
+    body {
+        background-image: url("https://images.unsplash.com/photo-1524985069026-dd778a71c7b4");
+        background-size: cover;
+        background-attachment: fixed;
+    }
+    .stApp {
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 2rem;
+        border-radius: 15px;
+    }
+    .stTextInput > div > div > input {
+        font-size: 16px;
+    }
+    .stTextArea > div > div > textarea {
+        font-size: 16px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 # App Header
 st.title("🎬 IMDB Movie Review Sentiment Analyzer")
