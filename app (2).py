@@ -2,6 +2,9 @@ import streamlit as st
 import joblib
 import base64
 
+# Set page configuration as the first command
+st.set_page_config(page_title="IMDB Sentiment Analyzer 🎬", layout="centered")
+
 # Function to set the background image from a local file (with base64 encoding)
 def set_background(image_file):
     with open(image_file, "rb") as image:
@@ -32,9 +35,6 @@ vectorizer = joblib.load('tfidf_vectorizerK.pkl')
 
 # Sentiment label mapping (adjust if necessary)
 label_mapping = {0: 'Negative', 1: 'Neutral', 2: 'Positive'}
-
-# Streamlit page config
-st.set_page_config(page_title="IMDB Sentiment Analyzer 🎬", layout="centered")
 
 # Custom CSS for font styling
 st.markdown(
