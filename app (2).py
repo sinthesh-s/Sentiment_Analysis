@@ -8,8 +8,8 @@ from tensorflow.keras.preprocessing.text import tokenizer_from_json
 
 # Load Tokenizer from JSON
 with open('tokenizer.json', 'r') as f:
-    tokenizer_data = json.load(f)
-    tokenizer = tokenizer_from_json(tokenizer_data)
+    tokenizer_json = f.read()
+    tokenizer = tokenizer_from_json(tokenizer_json)
 
 # Load Label Encoder (Updated filename)
 label_encoder = joblib.load('label_encoderX.pkl')
