@@ -2,7 +2,7 @@ import streamlit as st
 import joblib
 import base64
 
-# Function to set background image from local file
+# Function to set background image from local file (and apply animation)
 def set_background(image_file):
     with open(image_file, "rb") as image:
         encoded = base64.b64encode(image.read()).decode()
@@ -12,6 +12,18 @@ def set_background(image_file):
         background-image: url("data:image/jpg;base64,{encoded}");
         background-size: cover;
         background-attachment: fixed;
+        animation: backgroundAnimation 15s infinite;
+    }}
+    @keyframes backgroundAnimation {{
+        0% {{
+            background-position: 0% 0%;
+        }}
+        50% {{
+            background-position: 100% 100%;
+        }}
+        100% {{
+            background-position: 0% 0%;
+        }}
     }}
     .stTextInput > div > div > input {{
         font-size: 16px;
@@ -26,17 +38,17 @@ def set_background(image_file):
     """
     st.markdown(css, unsafe_allow_html=True)
 
-# Set background image
+# Set background image and animation
 set_background("background_image.jpg")
 
 # Load the trained model and vectorizer
-model = joblib.load('logistic_regression_modelK.pkl')
-vectorizer = joblib.load('tfidf_vectorizerK.pkl')
+model = joblib.load('logistic_regression_modelF.pkl')
+vectorizer = joblib.load('tfidf_vectorizer.pkl')
 
-# Sentiment label mapping
+# Sentiment label mapping (adjust if necessary)
 label_mapping = {0: 'Negative', 1: 'Neutral', 2: 'Positive'}
 
-# Page Configuration
+# Streamlit page config
 st.set_page_config(page_title="IMDB Sentiment Analyzer 🎬", layout="centered")
 
 # App Header
@@ -46,10 +58,10 @@ st.write("Welcome! Enter a movie review below and let the model predict if it's 
 # Text input
 user_input = st.text_area("📝 Write your review here:")
 
-# Prediction button
+# Predict button
 if st.button("🔍 Analyze Sentiment"):
     if user_input.strip():
-        # Transform input
+        # Transform input using TF-IDF vectorizer
         review_vector = vectorizer.transform([user_input])
 
         # Predict sentiment
