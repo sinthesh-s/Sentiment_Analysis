@@ -35,7 +35,9 @@ def remove_html_tags(text):
 
 def clean_text(text):
     text = text.lower()
-    text = re.sub(f'[{re.escape(string.punctuation)}]', '', text)
+    # Keep common negations
+    text = re.sub(r"n['’`]t", " not", text)  # "don't" -> "do not", "isn't" -> "is not"
+    text = re.sub(f"[{re.escape(string.punctuation)}]", "", text)
     text = re.sub(r'\s+', ' ', text).strip()
     return text
 
@@ -50,7 +52,7 @@ set_background("background_image.jpg")
 # Load the trained model, vectorizer, and label encoder
 model = joblib.load('logistic_regression_modelX.pkl')
 vectorizer = joblib.load('tfidf_vectorizerX.pkl')
-label_encoder = joblib.load('label_encoderX.pkl')  # <-- New addition
+label_encoder = joblib.load('label_encoderX.pkl')
 
 # Custom CSS
 st.markdown(
@@ -85,7 +87,7 @@ if st.button("🔍 Analyze Sentiment"):
         cleaned_input = deep_clean(user_input)
         review_vector = vectorizer.transform([cleaned_input])
         prediction = model.predict(review_vector)[0]
-        predicted_sentiment = label_encoder.inverse_transform([prediction])[0]  # <-- Correct prediction decoding
+        predicted_sentiment = label_encoder.inverse_transform([prediction])[0]
 
         # Display result
         st.subheader("🎯 Prediction Result:")
