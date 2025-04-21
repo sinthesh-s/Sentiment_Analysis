@@ -30,23 +30,24 @@ def set_background(image_file):
         font-size: 16px;
         border-radius: 10px;
         padding: 0.5rem;
-        background-color: rgba(0, 0, 0, 0.6);  /* Dark background */
-        color: white !important;               /* White text */
+        background-color: rgba(0, 0, 0, 0.6);
+        color: white !important;
     }}
     .stButton button {{
-        background-color: #FF4B4B;
+        background: linear-gradient(90deg, #007cf0, #00dfd8);
         color: white;
         border: none;
         border-radius: 10px;
-        padding: 0.6rem 1.5rem;
-        font-weight: bold;
-        transition: 0.4s ease;
-        box-shadow: 0 4px 14px rgba(255, 75, 75, 0.4);
+        padding: 0.6rem 1.8rem;
+        font-weight: 700;
+        font-size: 16px;
+        transition: 0.3s ease-in-out;
+        box-shadow: 0 4px 10px rgba(0, 124, 240, 0.4);
     }}
     .stButton button:hover {{
-        background-color: #e63636;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 22px rgba(255, 28, 28, 0.6);
+        background: linear-gradient(90deg, #005ecb, #00c4be);
+        transform: scale(1.05);
+        box-shadow: 0 6px 14px rgba(0, 124, 240, 0.6);
     }}
     .stSubheader, .stCaption, .stMarkdown, .stText, .stTitle, .stHeader {{
         color: white;
@@ -85,7 +86,7 @@ st.write("💡 Enter your movie review and let AI predict the sentiment: **Posit
 
 user_input = st.text_area("📝 Write your review here:")
 
-if st.button("🔍 Analyze Sentiment"):
+if st.button("🔍 Predict Sentiment"):
     if user_input.strip():
         with st.spinner('Analyzing sentiment... 🎬🧠'):
             processed_input = handle_negation(user_input)
@@ -99,7 +100,6 @@ if st.button("🔍 Analyze Sentiment"):
             st.subheader("🎯 Prediction Result:")
             st.success(f"✅ The review is predicted to be: **{predicted_sentiment.upper()}**")
 
-            # Confidence Bar Chart
             st.markdown("### 📊 Prediction Confidence:")
             chart_data = {
                 label_mapping[i]: [round(prob * 100, 2)]
@@ -107,7 +107,7 @@ if st.button("🔍 Analyze Sentiment"):
             }
             st.bar_chart(chart_data)
     else:
-        st.warning("⚠️ Please enter a valid review before clicking Analyze.")
+        st.warning("⚠️ Please enter a valid review before clicking Predict.")
 
 st.markdown("---")
 st.caption("Made with ❤️ using Streamlit and Logistic Regression.")
