@@ -66,7 +66,7 @@ st.sidebar.title("About 🎬")
 st.sidebar.markdown("""
 This app uses **Multinomial Logistic Regression** to predict the sentiment of IMDB movie reviews.
 
-[View Source on GitHub](https://github.com/yourusername/your-repo)
+[View Source on GitHub](https://github.com/sinthesh-s/Sentiment_Analysis)
 """)
 
 # Load model, vectorizer, and label encoder
