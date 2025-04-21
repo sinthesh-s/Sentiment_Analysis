@@ -6,7 +6,7 @@ import base64
 import re
 import numpy as np
 
-# Set page configuration FIRST
+# Set page configuration
 st.set_page_config(page_title="IMDB Sentiment Analyzer 🎬", layout="centered")
 
 # Background Image Setup
@@ -30,7 +30,8 @@ def set_background(image_file):
         font-size: 16px;
         border-radius: 10px;
         padding: 0.5rem;
-        background-color: rgba(255, 255, 255, 0.85);
+        background-color: rgba(0, 0, 0, 0.6);  /* Dark background */
+        color: white !important;               /* White text */
     }}
     .stButton button {{
         background-color: #FF4B4B;
@@ -62,8 +63,7 @@ set_background("background_image.jpg")
 # Sidebar
 st.sidebar.title("About 🎬")
 st.sidebar.markdown("""
-This app uses **Multinomial Logistic Regression**  
-to predict the sentiment of IMDB movie reviews.
+This app uses **Multinomial Logistic Regression** to predict the sentiment of IMDB movie reviews.
 
 [View Source on GitHub](https://github.com/yourusername/your-repo)
 """)
