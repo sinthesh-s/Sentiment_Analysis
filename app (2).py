@@ -18,51 +18,49 @@ def set_background(image_file):
         background-image: url("data:image/jpg;base64,{encoded}");
         background-size: cover;
         background-attachment: fixed;
-        animation: fadeInBackground 3s ease;
+        animation: fadeInBackground 2s ease;
     }}
     @keyframes fadeInBackground {{
         0% {{ opacity: 0; }}
         100% {{ opacity: 1; }}
     }}
-    .main-card {{
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(10px);
-        border-radius: 20px;
-        padding: 2rem;
-        box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
-        text-align: center;
-        animation: fadeInCard 1.5s ease;
-    }}
-    @keyframes fadeInCard {{
-        from {{ opacity: 0; transform: translateY(20px); }}
-        to {{ opacity: 1; transform: translateY(0); }}
-    }}
     .stTextInput > div > div > input, 
     .stTextArea > div > div > textarea {{
         font-size: 16px;
-        border-radius: 12px;
+        border-radius: 10px;
         padding: 0.5rem;
-        background: rgba(255, 255, 255, 0.6);
+        background-color: #ffffffcc;
     }}
     .stButton button {{
         background-color: #FF4B4B;
         color: white;
         border: none;
-        border-radius: 12px;
+        border-radius: 10px;
         padding: 0.6rem 1.5rem;
         font-weight: bold;
-        transition: 0.4s;
-        box-shadow: 0 4px 15px rgba(255, 75, 75, 0.4);
+        transition: 0.4s ease;
+        box-shadow: 0 4px 14px rgba(255, 75, 75, 0.4);
     }}
     .stButton button:hover {{
-        background-color: #ff1c1c;
+        background-color: #e63636;
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(255, 28, 28, 0.6);
+        box-shadow: 0 6px 22px rgba(255, 28, 28, 0.6);
     }}
     .stSubheader, .stCaption {{
         font-weight: 600;
-        color: #ffffff;
-        text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        color: #fff;
+        text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    }}
+    .main-container {{
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 2rem;
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        animation: fadeInCard 1.2s ease;
+    }}
+    @keyframes fadeInCard {{
+        from {{ opacity: 0; transform: translateY(20px); }}
+        to {{ opacity: 1; transform: translateY(0); }}
     }}
     </style>
     """
@@ -83,11 +81,11 @@ def handle_negation(text):
 # Mapping labels back
 label_mapping = {index: label for index, label in enumerate(label_encoder.classes_)}
 
-# App UI with modern styling
-st.markdown("<div class='main-card'>", unsafe_allow_html=True)
+# Main App Layout
+st.markdown("<div class='main-container'>", unsafe_allow_html=True)
 
 st.title("🎬 IMDB Movie Review Sentiment Analyzer")
-st.write("💡 *Let AI tell you if your movie review sounds Positive, Neutral or Negative!*")
+st.write("💡 Enter your movie review and let AI predict the sentiment: **Positive**, **Neutral**, or **Negative**.")
 
 user_input = st.text_area("📝 Write your review here:")
 
@@ -104,5 +102,6 @@ if st.button("🔍 Analyze Sentiment"):
 
 st.markdown("</div>", unsafe_allow_html=True)
 
+# Footer
 st.markdown("---")
 st.caption("Made with ❤️ using Streamlit and Logistic Regression.")
