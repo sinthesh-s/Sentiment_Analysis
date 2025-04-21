@@ -13,6 +13,7 @@ with open('tokenizer.json', 'r') as f:
 
 # Load Label Encoder (Updated filename)
 label_encoder = joblib.load('label_encoderX.pkl')
+print("Label classes:", label_encoder.classes_)
 
 # Load Model
 model = load_model('bilstm_model.h5')
@@ -38,8 +39,15 @@ if st.button("Predict Sentiment"):
 
         # Predict
         prediction_probs = model.predict(padded)
-        predicted_class = np.argmax(prediction_probs, axis=1)[0]
-        sentiment = label_encoder.inverse_transform([predicted_class])[0]
 
-        # Display
+        # Debugging outputs
+        print("Raw prediction probabilities:", prediction_probs)
+
+        predicted_class = np.argmax(prediction_probs, axis=1)[0]
+        print("Predicted class index:", predicted_class)
+
+        sentiment = label_encoder.inverse_transform([predicted_class])[0]
+        print("Predicted sentiment label:", sentiment)
+
+        # Display result
         st.success(f"Predicted Sentiment: **{sentiment.capitalize()}**")
