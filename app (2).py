@@ -1,53 +1,71 @@
+# app.py
+
 import streamlit as st
-import numpy as np
 import joblib
-import json
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing.sequence import pad_sequences
-from tensorflow.keras.preprocessing.text import tokenizer_from_json
+import base64
+import re
 
-# Load Tokenizer from JSON
-with open('tokenizer.json', 'r') as f:
-    tokenizer_json = f.read()
-    tokenizer = tokenizer_from_json(tokenizer_json)
+# Set page configuration FIRST
+st.set_page_config(page_title="IMDB Sentiment Analyzer 🎬", layout="centered")
 
-# Load Label Encoder (Updated filename)
-label_encoder = joblib.load('label_encoderX.pkl')
-print("Label classes:", label_encoder.classes_)
+# Background Image Setup
+def set_background(image_file):
+    with open(image_file, "rb") as image:
+        encoded = base64.b64encode(image.read()).decode()
+    css = f"""
+    <style>
+    .stApp {{
+        background-image: url("data:image/jpg;base64,{encoded}");
+        background-size: cover;
+        background-attachment: fixed;
+    }}
+    .stApp .stTextInput > div > div > input {{
+        font-size: 16px;
+    }}
+    .stApp .stTextArea > div > div > textarea {{
+        font-size: 16px;
+    }}
+    </style>
+    """
+    st.markdown(css, unsafe_allow_html=True)
 
-# Load Model
-model = load_model('bilstm_model.h5')
+# Set background image from local file
+set_background("background_image.jpg")
 
-# Constants
-MAX_LEN = 200  # Must match the length used in training
+# Load model, vectorizer, and label encoder
+model = joblib.load('logistic_regression_modelZ.pkl')
+vectorizer = joblib.load('tfidf_vectorizerZ.pkl')
+label_encoder = joblib.load('label_encoderZ.pkl')
+
+# Negation handler (must match training logic!)
+def handle_negation(text):
+    return re.sub(r'\bnot\s+(\w+)', r'not_\1', text.lower())
+
+# Mapping labels back
+label_mapping = {index: label for index, label in enumerate(label_encoder.classes_)}
 
 # App UI
-st.title("🎬 IMDB MoviEEEEe Review Sentiment Classifier (BiLSTM)")
-st.markdown("Enter a movie review below and the model will classify it as Positive, Neutral, or Negative.")
+st.title("🎬 IMDB Movie Review Sentiment Analyzer")
+st.write("Welcome! Enter a movie review below and let the model predict if it's **Positive**, **Neutral**, or **Negative**! 💬")
 
-# User Input
-user_input = st.text_area("Write your review here:", height=150)
+user_input = st.text_area("📝 Write your review here:")
 
-# Predict Button
-if st.button("Predict Sentiment"):
-    if user_input.strip() == "":
-        st.warning("Please enter a review.")
-    else:
-        # Preprocess
-        sequence = tokenizer.texts_to_sequences([user_input])
-        padded = pad_sequences(sequence, maxlen=MAX_LEN)
+if st.button("🔍 Analyze Sentiment"):
+    if user_input.strip():
+        # Apply negation handling
+        processed_input = handle_negation(user_input)
+
+        # Vectorize input
+        review_vector = vectorizer.transform([processed_input])
 
         # Predict
-        prediction_probs = model.predict(padded)
+        prediction = model.predict(review_vector)[0]
+        predicted_sentiment = label_mapping.get(prediction, "Unknown")
 
-        # Debugging outputs
-        print("Raw prediction probabilities:", prediction_probs)
+        st.subheader("🎯 Prediction Result:")
+        st.success(f"✅ The review is predicted to be: **{predicted_sentiment.upper()}**")
+    else:
+        st.warning("⚠️ Please enter a valid review before clicking Analyze.")
 
-        predicted_class = np.argmax(prediction_probs, axis=1)[0]
-        print("Predicted class index:", predicted_class)
-
-        sentiment = label_encoder.inverse_transform([predicted_class])[0]
-        print("Predicted sentiment label:", sentiment)
-
-        # Display result
-        st.success(f"Predicted Sentiment: **{sentiment.capitalize()}**")
+st.markdown("---")
+st.caption("Made with ❤️ using Streamlit and Logistic Regression.")
