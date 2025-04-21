@@ -47,10 +47,10 @@ def set_background(image_file):
         transform: translateY(-2px);
         box-shadow: 0 6px 22px rgba(255, 28, 28, 0.6);
     }}
-    .stSubheader, .stCaption {{
+    .stSubheader, .stCaption, .stMarkdown, .stText, .stTitle, .stHeader {{
+        color: white;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
         font-weight: 600;
-        color: #fff;
-        text-shadow: 0 1px 3px rgba(0,0,0,0.4);
     }}
     </style>
     """
@@ -64,10 +64,6 @@ st.sidebar.title("About 🎬")
 st.sidebar.markdown("""
 This app uses **Multinomial Logistic Regression**  
 to predict the sentiment of IMDB movie reviews.
-
-- ✅ Supports **Positive, Neutral, Negative**
-- 💡 Handles **negation** like "not bad" or "not good".
-- 🎯 Built using **Scikit-Learn + Streamlit**
 
 [View Source on GitHub](https://github.com/yourusername/your-repo)
 """)
