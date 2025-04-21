@@ -1,9 +1,5 @@
 streamlit
 scikit-learn
 joblib
-tensorflow
-xgboost
-matplotlib
-seaborn
-nltk
-wordcloud
+pandas
+numpy
