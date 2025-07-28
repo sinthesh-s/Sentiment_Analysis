@@ -3,31 +3,33 @@ import joblib
 import os
 import gdown
 
-# === Filenames and Google Drive File ID ===
 MODEL_FILE = "logistic_regression_modelF.pkl"
-MODEL_FILE_ID = "12DfR9Kf0pdJEPSx4yqWUA35aWQA7KCP9"  # From your shared link
+VECTORIZER_FILE = "tfidf_vectorizer.pkl"
 
-# === Download model from Google Drive if not already present ===
-def download_model_from_drive(file_id, output_path):
+# Replace with your actual file IDs from Google Drive
+model_file_id = "12DfR9Kf0pdJEPSx4yqWUA35aWQA7KCP9"
+vectorizer_file_id = "tfidf_vectorizer (1).pkl"
+
+# Function to download files from Google Drive
+def download_from_gdrive(file_id, output_path):
     url = f"https://drive.google.com/uc?id={file_id}"
     gdown.download(url, output_path, quiet=False)
 
+# Download model if not exists
 if not os.path.exists(MODEL_FILE):
-    st.info("📦 Downloading large model file from Google Drive...")
-    download_model_from_drive(MODEL_FILE_ID, MODEL_FILE)
+    download_from_gdrive(model_file_id, MODEL_FILE)
 
-# === Load model and vectorizer ===
+if not os.path.exists(VECTORIZER_FILE):
+    download_from_gdrive(vectorizer_file_id, VECTORIZER_FILE)
+
+# Load model and vectorizer
 model = joblib.load(MODEL_FILE)
-vectorizer = joblib.load("tfidf_vectorizer.pkl")  # Your local file
+vectorizer = joblib.load(VECTORIZER_FILE)
 
-# === Streamlit App UI ===
-st.title("🎬 IMDB Movie Review Sentiment Classifier")
-st.markdown("Enter a movie review below and the model will classify it as **Positive**, **Neutral**, or **Negative**.")
-
-# === Text input ===
+# App
+st.title("🎬 IMDB Movie Review Sentiment Classifier (Google Drive Model)")
 user_input = st.text_area("Write your review here:", height=150)
 
-# === Prediction ===
 if st.button("Predict Sentiment"):
     if user_input.strip() == "":
         st.warning("⚠️ Please enter a review.")
