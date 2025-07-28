@@ -1,25 +1,17 @@
 import streamlit as st
-import numpy as np
 import joblib
-import pickle
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing.sequence import pad_sequences
+import numpy as np
 
-# Constants
-MAX_LEN = 200  # Must match the length used during training
+# Load TF-IDF vectorizer
+with open("tfidf_vectorizer.pkl", "rb") as tfidf_file:
+    vectorizer = joblib.load(tfidf_file)
 
-# Load tokenizer
-with open('tokenizer.pickle', 'rb') as handle:
-    tokenizer = pickle.load(handle)
-
-# Load label encoder
-label_encoder = joblib.load('label_encoderX.pkl')
-
-# Load model
-model = load_model('sentiment_model.h5')
+# Load Logistic Regression model
+with open("logistic_regression_modelF.pkl", "rb") as model_file:
+    model = joblib.load(model_file)
 
 # App title
-st.title("🎬 IMDB Movie Review Sentiment Classifier (BiLSTM)")
+st.title("🎬 IMDB Movie Review Sentiment Classifier (Logistic Regression)")
 st.markdown("Enter a movie review below and the model will classify it as **Positive**, **Neutral**, or **Negative**.")
 
 # User input
@@ -30,14 +22,11 @@ if st.button("Predict Sentiment"):
     if user_input.strip() == "":
         st.warning("⚠️ Please enter a review.")
     else:
-        # Tokenize and pad the input
-        sequence = tokenizer.texts_to_sequences([user_input])
-        padded = pad_sequences(sequence, maxlen=MAX_LEN)
+        # Vectorize input
+        transformed_input = vectorizer.transform([user_input])
 
-        # Predict
-        prediction_probs = model.predict(padded)
-        predicted_class = np.argmax(prediction_probs, axis=1)[0]
-        sentiment = label_encoder.inverse_transform([predicted_class])[0]
+        # Predict sentiment
+        prediction = model.predict(transformed_input)[0]
 
-        # Display prediction
-        st.success(f"✅ Predicted Sentiment: **{sentiment.capitalize()}**")
+        # Show result
+        st.success(f"✅ Predicted Sentiment: **{prediction.capitalize()}**")
