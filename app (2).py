@@ -1,71 +1,54 @@
 import streamlit as st
-import pickle
-import gzip
-import os
-import base64
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing.sequence import pad_sequences
 import numpy as np
+import gdown
+import os
+from keras.models import load_model
+from keras.preprocessing.sequence import pad_sequences
+from tensorflow.keras.preprocessing.text import Tokenizer
 
-# ---- Set page layout ----
+# Set page title
 st.set_page_config(page_title="Sentiment Analysis", layout="centered")
 
-# ---- Background Styling ----
-def set_background(image_file):
-    with open(image_file, "rb") as f:
-        encoded = base64.b64encode(f.read()).decode()
-    style = f"""
-    <style>
-    .stApp {{
-        background-image: url("data:image/jpg;base64,{encoded}");
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-    }}
-    .stTextInput > label, .stTextArea > label {{
-        color: white;
-        font-weight: bold;
-    }}
-    </style>
-    """
-    st.markdown(style, unsafe_allow_html=True)
+# -----------------------
+# Download model if not exists
+MODEL_PATH = "lstm_sentiment_model.h5"
+if not os.path.exists(MODEL_PATH):
+    file_id = "1PtnS4mQ5Es3Qjl1jfMSf5a5Lai420Ppi"
+    url = f"https://drive.google.com/uc?id={file_id}"
+    gdown.download(url, MODEL_PATH, quiet=False)
 
-# ---- Load Model and Tokenizer ----
-model = load_model("lstm_sentiment_model.h5")
+# -----------------------
+# Load LSTM model
+model = load_model(MODEL_PATH)
 
-with gzip.open("tokenizer.pkl.gz", "rb") as f:
+# Load tokenizer
+import pickle
+with open("tokenizer.pkl", "rb") as f:
     tokenizer = pickle.load(f)
 
-# ---- UI ----
-set_background("background_image.jpg")
+# -----------------------
+# Define max length (must match training)
+MAX_LEN = 200
 
-st.markdown("<h1 style='text-align:center; color:white;'>🎬 Movie Review Sentiment Analysis</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align:center; color:white;'>Enter a review below to detect its sentiment using an LSTM model.</p>", unsafe_allow_html=True)
+# Predict function
+def predict_sentiment(text):
+    seq = tokenizer.texts_to_sequences([text])
+    padded = pad_sequences(seq, maxlen=MAX_LEN)
+    pred = model.predict(padded)[0]
+    sentiment = np.argmax(pred)
+    label = ["Negative", "Neutral", "Positive"][sentiment]
+    confidence = float(pred[sentiment])
+    return label, confidence
 
-review = st.text_area("Write your review here:", height=150)
+# -----------------------
+# Streamlit UI
+st.title("Sentiment Analysis App")
+user_input = st.text_area("Enter your comment:", height=150)
 
-if st.button("Predict Sentiment"):
-    if review.strip():
-        # Tokenize and pad
-        seq = tokenizer.texts_to_sequences([review])
-        padded = pad_sequences(seq, maxlen=200)  # Make sure 200 matches training
-
-        # Predict
-        prediction = model.predict(padded)
-
-        # Debug: Show raw output
-        st.write("🔍 Raw Prediction Output:", prediction)
-
-        # Try both possibilities:
-        if prediction.shape[1] == 1:
-            # Model outputs a class directly (e.g., [[1]])
-            label = int(prediction[0][0])
-        else:
-            # Model outputs softmax probabilities (e.g., [[0.1, 0.7, 0.2]])
-            label = np.argmax(prediction[0])
-
-        sentiment = {0: "Negative", 1: "Neutral", 2: "Positive"}.get(label, "Unknown")
-        st.markdown(f"<h3 style='color:white;'>Sentiment: <span style='color:#FFD700;'>{sentiment}</span></h3>", unsafe_allow_html=True)
+if st.button("Analyze"):
+    if user_input.strip() == "":
+        st.warning("Please enter some text.")
     else:
-        st.warning("Please enter a valid review.")
+        label, confidence = predict_sentiment(user_input)
+        st.markdown(f"**Prediction:** {label}")
+        st.markdown(f"**Confidence:** {confidence:.2f}")
