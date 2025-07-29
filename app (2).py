@@ -29,7 +29,7 @@ def set_background(image_file):
     st.markdown(background_style, unsafe_allow_html=True)
 
 # ---- LOAD MODEL & TOKENIZER ----
-model = load_model("lstm_sentiment_model.h5.gz")
+model = load_model("lstm_sentiment_model.h5")
 with open("tokenizer.pkl.gz", "rb") as f:
     tokenizer = pickle.load(f)
 
