@@ -1,6 +1,5 @@
+gdown
 streamlit
 tensorflow
+keras
 numpy
-scikit-learn
-Pillow
-gdown
