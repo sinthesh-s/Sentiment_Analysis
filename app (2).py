@@ -28,6 +28,10 @@ def predict_sentiment(text):
     seq = tokenizer.texts_to_sequences([text])
     padded = pad_sequences(seq, maxlen=MAX_LEN)
     pred = model.predict(padded)[0]
+    st.write("Tokenized Sequence:", seq)
+    st.write("Padded Sequence:", padded)
+    st.write("Raw Prediction Scores:", pred.tolist())  # Show probabilities
+
     sentiment = np.argmax(pred)
     label = ["Negative", "Neutral", "Positive"][sentiment]
     confidence = float(pred[sentiment])
