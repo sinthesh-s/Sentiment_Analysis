@@ -1,36 +1,29 @@
 import streamlit as st
 import numpy as np
-import gdown
 import os
 from keras.models import load_model
 from keras.preprocessing.sequence import pad_sequences
-from tensorflow.keras.preprocessing.text import Tokenizer
+import pickle
 
 # Set page title
 st.set_page_config(page_title="Sentiment Analysis", layout="centered")
 
 # -----------------------
-# Download model if not exists
-MODEL_PATH = "lstm_sentiment_model.h5"
-if not os.path.exists(MODEL_PATH):
-    file_id = "1PtnS4mQ5Es3Qjl1jfMSf5a5Lai420Ppi"
-    url = f"https://drive.google.com/uc?id={file_id}"
-    gdown.download(url, MODEL_PATH, quiet=False)
+# Model and tokenizer paths
+MODEL_PATH = "lstm_sentiment_model__.keras"
+TOKENIZER_PATH = "tokenizer__.pkl"
 
-# -----------------------
 # Load LSTM model
 model = load_model(MODEL_PATH)
 
 # Load tokenizer
-import pickle
-with open("tokenizer.pkl", "rb") as f:
+with open(TOKENIZER_PATH, "rb") as f:
     tokenizer = pickle.load(f)
 
-# -----------------------
-# Define max length (must match training)
+# Define max sequence length (must match training)
 MAX_LEN = 200
 
-# Predict function
+# Prediction function
 def predict_sentiment(text):
     seq = tokenizer.texts_to_sequences([text])
     padded = pad_sequences(seq, maxlen=MAX_LEN)
