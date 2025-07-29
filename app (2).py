@@ -1,17 +1,19 @@
 import streamlit as st
-import base64
 import pickle
+import gzip
+import os
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing.sequence import pad_sequences
+import base64
 
-# ---- PAGE CONFIG ----
+# ---- Set page layout ----
 st.set_page_config(page_title="Sentiment Analysis", layout="centered")
 
-# ---- FUNCTION: Add Background Image ----
+# ---- Background Styling ----
 def set_background(image_file):
     with open(image_file, "rb") as f:
         encoded = base64.b64encode(f.read()).decode()
-    background_style = f"""
+    style = f"""
     <style>
     .stApp {{
         background-image: url("data:image/jpg;base64,{encoded}");
@@ -26,30 +28,28 @@ def set_background(image_file):
     }}
     </style>
     """
-    st.markdown(background_style, unsafe_allow_html=True)
+    st.markdown(style, unsafe_allow_html=True)
 
-# ---- LOAD MODEL & TOKENIZER ----
+# ---- Load Model and Tokenizer ----
 model = load_model("lstm_sentiment_model.h5")
-with open("tokenizer.pkl.gz", "rb") as f:
+
+with gzip.open("tokenizer.pkl.gz", "rb") as f:
     tokenizer = pickle.load(f)
 
-# ---- UI DESIGN ----
+# ---- UI ----
 set_background("background_image.jpg")
 
-st.markdown("<h1 style='text-align: center; color: white;'>🎬 Movie Review Sentiment Analysis</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; color: white;'>Enter a review below and let the AI detect its sentiment!</p>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align:center; color:white;'>🎬 Movie Review Sentiment Analysis</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align:center; color:white;'>Enter a review below to detect its sentiment using LSTM model</p>", unsafe_allow_html=True)
 
 review = st.text_area("Write your review here:", height=150)
 
 if st.button("Predict Sentiment"):
     if review.strip():
-        # Tokenize and pad the input
         seq = tokenizer.texts_to_sequences([review])
         padded = pad_sequences(seq, maxlen=200)
 
         prediction = model.predict(padded)[0]
-
-        # Get the index of the highest probability
         label = prediction.argmax()
 
         sentiment = {0: "Negative", 1: "Neutral", 2: "Positive"}.get(label, "Unknown")
