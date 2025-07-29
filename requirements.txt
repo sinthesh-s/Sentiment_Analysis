@@ -1,4 +1,5 @@
 streamlit
-gdown
+tensorflow
+numpy
 scikit-learn
-joblib
+Pillow
